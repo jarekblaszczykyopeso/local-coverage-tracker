@@ -7,6 +7,7 @@ dockerNode {
       }
       stage('Publish tests') {
          junit 'target/surefire-reports/*.xml'
+         jacoco(execPattern: 'target/jacoco-unit/jacoco.exec')
       }
    }
 }
