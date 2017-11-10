@@ -26,7 +26,7 @@ public class CoverageRepositoryTest {
     Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
 
     /**
-     * Testing the 3 cases: find coverage by date, find without date, try to find not existing record.
+     * Testing the 4 cases: find coverage by date, find without date, try to find not existing record (date and then project name).
      */
     @Test
     public void testRepo() {
@@ -35,12 +35,15 @@ public class CoverageRepositoryTest {
         Optional<Coverage> coverageDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc("project", "branch", "build", LocalDate.of(2017, 4, 27));
         Optional<Coverage> coverageNoDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("project", "branch", "build");
         Optional<Coverage> coverageBadDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc("project", "branch", "build", LocalDate.of(2017, 4, 29));
+        Optional<Coverage> coverageBadProjectNoDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("projectBad", "branch", "build");
         //take he number, id will be different probably
         assertEquals(7, coverageDate.get().getCoverage());
         //take he number, id will be different probably
         assertEquals(8, coverageNoDate.get().getCoverage());
-        //does not exist
+        //does not exist for this date
         assertFalse(coverageBadDate.isPresent());
+        //does not exist for this projectName
+        assertFalse(coverageBadProjectNoDate.isPresent());
 
     }
 

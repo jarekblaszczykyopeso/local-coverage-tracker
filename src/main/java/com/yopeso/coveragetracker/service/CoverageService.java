@@ -3,6 +3,7 @@ package com.yopeso.coveragetracker.service;
 import com.yopeso.coveragetracker.domain.Coverage;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * Service for coverage.
@@ -11,5 +12,6 @@ import java.time.LocalDate;
 
 public interface CoverageService {
     void saveCoverage(Coverage coverage);
-    int getCoverage(String projectName, String projectBranch, String buildNumber, LocalDate date);
+
+    Optional<Integer> getCoverage(String projectName, String projectBranch, String buildNumber, LocalDate date);
 }

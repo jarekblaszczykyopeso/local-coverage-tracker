@@ -35,17 +35,21 @@ public class CoverageServiceImplementation implements CoverageService {
      * @param branchName  the name of the branch in repo
      * @param buildNumber the build number
      * @param date        the date
-     * @return int coverage number or -1 if no records for given conditions are found
+     * @return Optional<Integer> coverage number or empty optional if no records for given conditions are found
      */
 
     @Override
-    public int getCoverage(String projectName, String branchName, String buildNumber, LocalDate date) {
+    public Optional<Integer> getCoverage(String projectName, String branchName, String buildNumber, LocalDate date) {
         Optional<Coverage> coverage;
         if (date != null) {
             coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc(projectName, branchName, buildNumber, date);
         } else {
             coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(projectName, branchName, buildNumber);
         }
-        return coverage.isPresent() ? coverage.get().getCoverage() : -1;
+        if (coverage.isPresent()) {
+            return Optional.of(coverage.get().getCoverage());
+        } else {
+            return Optional.empty();
+        }
     }
 }

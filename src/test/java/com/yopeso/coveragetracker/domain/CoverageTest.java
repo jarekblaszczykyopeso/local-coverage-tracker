@@ -2,7 +2,6 @@ package com.yopeso.coveragetracker.domain;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,16 +15,13 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Coverage.class)
 public class CoverageTest {
-    @Autowired
-    Coverage coverageNoArgsConstructor;
     Coverage coverageAllArgsConstructor = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
 
     /**
-     * Simple test with 2 constructors.
+     * Simple test with 1 constructor.
      */
     @Test
     public void testModel() {
-        assertEquals(new Coverage(), coverageNoArgsConstructor);
         Coverage coverageAllExpected = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
         assertEquals(coverageAllExpected, coverageAllArgsConstructor);
     }
