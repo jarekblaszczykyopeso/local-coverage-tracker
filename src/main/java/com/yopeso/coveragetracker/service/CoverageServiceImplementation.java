@@ -2,10 +2,10 @@ package com.yopeso.coveragetracker.service;
 
 import com.yopeso.coveragetracker.domain.Coverage;
 import com.yopeso.coveragetracker.domain.CoverageRepository;
+import com.yopeso.coveragetracker.domain.CoverageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -26,25 +26,21 @@ public class CoverageServiceImplementation implements CoverageService {
         coverageRepository.save(coverage);
     }
 
-
     /**
      * Reads the coverage number for the last coverage record in db satisfying the conditions.
      * If date is null, all records for the given project, branch and build are taken into consideration.
      *
-     * @param projectName the name of the project
-     * @param branchName  the name of the branch in repo
-     * @param buildNumber the build number
-     * @param date        the date
+     * @param coverageRequest CoverageRequest entity with project, branch, build and date
      * @return Optional<Integer> coverage number or empty optional if no records for given conditions are found
      */
 
     @Override
-    public Optional<Integer> getCoverage(String projectName, String branchName, String buildNumber, LocalDate date) {
+    public Optional<Integer> getCoverage(CoverageRequest coverageRequest) {
         Optional<Coverage> coverage;
-        if (date != null) {
-            coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc(projectName, branchName, buildNumber, date);
+        if (coverageRequest.getDate() != null) {
+            coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc(coverageRequest.getProjectName(), coverageRequest.getBranchName(), coverageRequest.getBuildNumber(), coverageRequest.getDate());
         } else {
-            coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(projectName, branchName, buildNumber);
+            coverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(coverageRequest.getProjectName(), coverageRequest.getBranchName(), coverageRequest.getBuildNumber());
         }
         if (coverage.isPresent()) {
             return Optional.of(coverage.get().getCoverage());

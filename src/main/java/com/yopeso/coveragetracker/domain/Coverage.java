@@ -24,7 +24,7 @@ public class Coverage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String projectName = "";
+    private String projectName;
     private String branchName;
     private String buildNumber;
     private LocalDate date;

@@ -22,8 +22,8 @@ public class CoverageRepositoryTest {
     @Autowired
     CoverageRepository coverageRepository;
 
-    Coverage april27 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
-    Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
+    final Coverage april27 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
+    final Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
 
     /**
      * Testing the 4 cases: find coverage by date, find without date, try to find not existing record (date and then project name).

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Coverage.class)
 public class CoverageTest {
-    Coverage coverageAllArgsConstructor = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
+    final Coverage coverageAllArgsConstructor = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
 
     /**
      * Simple test with 1 constructor.
