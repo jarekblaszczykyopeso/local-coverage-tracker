@@ -3,21 +3,21 @@ package com.yopeso.coveragetracker.web;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.time.LocalDate;
-import java.util.Collections;
+
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 /**
  * Rest controller for the coverage.
@@ -39,7 +39,7 @@ public class CoverageController {
      * @param buildNumber build number
      * @return int the last coverage for given parameters (without date) found in db or -1 if is not found
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/projects/{projectName}/branches/{branchName}/builds/{buildNumber}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{projectName}/{branchName}/{buildNumber}")
     public int getCoverage(@PathVariable String projectName, @PathVariable String branchName,
                            @PathVariable String buildNumber) {
         return getCoverage(projectName, branchName, buildNumber, null);
@@ -55,7 +55,7 @@ public class CoverageController {
      * @return int the last coverage for given parameters (with date) found in db or -1 if is not found
      */
 
-    @RequestMapping(method = RequestMethod.GET, value = "/projects/{projectName}/branches/{branchName}/builds/{buildNumber}/dates/{date}")
+    @RequestMapping(method = RequestMethod.GET, value = "/{projectName}/{branchName}/{buildNumber}/{date}")
     public int getCoverageWithDate(@PathVariable String projectName, @PathVariable String branchName,
                                    @PathVariable String buildNumber, @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         return getCoverage(projectName, branchName, buildNumber, date);
@@ -66,21 +66,21 @@ public class CoverageController {
      * Create the coverage record in db.
      * When the record is created return 201 status and in header url for get request for the coverage; 204 status otherwise.
      *
-     * @param projectName  project name
-     * @param branchName   branch name
-     * @param buildNumber  build number
-     * @param coverageJson json containing coverage put into the body of request
+     * @param projectName         project name
+     * @param branchName          branch name
+     * @param buildNumber         build number
+     * @param coverageMeasurement json containing coverage put into the body of request
      * @return ResponseEntity;
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/projects/{projectName}/branches/{branchName}/builds/{buildNumber}")
+    @RequestMapping(method = RequestMethod.POST, value = "/{projectName}/{branchName}/{buildNumber}")
     public ResponseEntity<?> postCoverage(@PathVariable String projectName, @PathVariable String branchName,
-                                          @PathVariable String buildNumber, @RequestBody CoverageJson coverageJson) {
+                                          @PathVariable String buildNumber, @RequestBody CoverageMeasurement coverageMeasurement) {
         //not saved record to db
         //TODO change it!!!
-        if (coverageJson.coverage < 0) {
+        if (coverageMeasurement.coverage < 0) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/dates/" + LocalDate.now().toString()).build().toUri()).build();
+            return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().path("/" + LocalDate.now().toString()).build().toUri()).build();
         }
     }
 
@@ -110,24 +110,24 @@ public class CoverageController {
  */
 @Data
 @AllArgsConstructor
-class CoverageJson {
+class CoverageMeasurement {
     int coverage;
 }
 
 /**
  * Class with the security configuration.
  */
-@Configuration
-@EnableWebSecurity
-class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-    @Bean
-    UserDetailsService users() {
-        return new InMemoryUserDetailsManager(Collections.singleton(User.withUsername("user").roles("ADMIN").password("pwd").build()));
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http.csrf().disable();
-    }
-}
+//@Configuration
+//@EnableWebSecurity
+//class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+//    @Bean
+//    UserDetailsService users() {
+//        return new InMemoryUserDetailsManager(Collections.singleton(User.withUsername("user").roles("ADMIN").password("pwd").build()));
+//    }
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        super.configure(http);
+//        http.csrf().disable();
+//    }
+//}
