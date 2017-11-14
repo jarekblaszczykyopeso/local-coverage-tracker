@@ -47,19 +47,4 @@ public class CoverageServiceImplTest {
         assertTrue(actual.isPresent());
         assertEquals(Integer.valueOf(99), actual.orElseThrow(RuntimeException::new));
     }
-
-
-//    @Test
-//    public void testService() {
-//        service.saveCoverage(april27);
-//        service.saveCoverage(april28);
-//        Optional<Integer> coverageDate = service.getCoverage(new CoverageRequest("project", "branch", "build", LocalDate.of(2017, 4, 27)));
-//        Optional<Integer> coverageNoDate = service.getCoverage(new CoverageRequest("project", "branch", "build", null));
-//        Optional<Integer> coverageBadDate = service.getCoverage(new CoverageRequest("project", "branch", "build", LocalDate.of(2017, 4, 29)));
-//        Optional<Integer> coverageBadProjectNoDate = service.getCoverage(new CoverageRequest("projectVeryBad", "branch", "build", null));
-//        assertEquals(7, coverageDate.get().intValue());
-//        assertEquals(8, coverageNoDate.get().intValue());
-//        assertFalse(coverageBadDate.isPresent());
-//        assertFalse(coverageBadProjectNoDate.isPresent());
-//    }
 }
