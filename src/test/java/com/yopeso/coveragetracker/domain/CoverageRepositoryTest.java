@@ -11,40 +11,23 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Test for repository.
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CoverageTrackerApplication.class)
 public class CoverageRepositoryTest {
+
     @Autowired
     CoverageRepository coverageRepository;
 
-    final Coverage april27 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
-    final Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
-
-    /**
-     * Testing the 4 cases: find coverage by date, find without date, try to find not existing record (date and then project name).
-     */
     @Test
     public void testRepo() {
+        final Coverage april27 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
+        final Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
         coverageRepository.save(april27);
         coverageRepository.save(april28);
-        Optional<Coverage> coverageDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc("project", "branch", "build", LocalDate.of(2017, 4, 27));
-        Optional<Coverage> coverageNoDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("project", "branch", "build");
-        Optional<Coverage> coverageBadDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberAndDateOrderByIdDesc("project", "branch", "build", LocalDate.of(2017, 4, 29));
-        Optional<Coverage> coverageBadProjectNoDate = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("projectBad", "branch", "build");
-        //take he number, id will be different probably
-        assertEquals(7, coverageDate.get().getCoverage());
-        //take he number, id will be different probably
-        assertEquals(8, coverageNoDate.get().getCoverage());
-        //does not exist for this date
-        assertFalse(coverageBadDate.isPresent());
-        //does not exist for this projectName
-        assertFalse(coverageBadProjectNoDate.isPresent());
-
+        Optional<Coverage> optionalCoverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("project", "branch", "build");
+        assertTrue(optionalCoverage.isPresent());
+        assertEquals(8, optionalCoverage.orElseThrow(RuntimeException::new).getCoverage());
     }
-
 }

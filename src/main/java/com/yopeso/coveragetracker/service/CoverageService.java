@@ -5,12 +5,8 @@ import com.yopeso.coveragetracker.domain.CoverageRequest;
 
 import java.util.Optional;
 
-/**
- * Service for coverage.
- */
-
-
 public interface CoverageService {
+
     void saveCoverage(Coverage coverage);
 
     Optional<Integer> getCoverage(CoverageRequest coverageRequest);
