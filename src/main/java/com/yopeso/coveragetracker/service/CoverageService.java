@@ -1,4 +1,17 @@
 package com.yopeso.coveragetracker.service;
 
-public class CoverageService {
+import com.yopeso.coveragetracker.domain.Coverage;
+import com.yopeso.coveragetracker.domain.CoverageRequest;
+
+import java.util.Optional;
+
+/**
+ * Service for coverage.
+ */
+
+
+public interface CoverageService {
+    void saveCoverage(Coverage coverage);
+
+    Optional<Integer> getCoverage(CoverageRequest coverageRequest);
 }
