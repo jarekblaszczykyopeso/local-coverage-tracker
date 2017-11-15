@@ -21,12 +21,18 @@ public class CoverageTrackerApplication {
 
     @Bean
     ApplicationRunner run(CoverageRepository coverageRepository) {
-        Stream<String> stream = Stream.of("Jarek", "Adrian", "Daniel");
+        final String jarek = "Jarek";
+        final String adrian = "Adrian";
+        final String daniel = "Daniel";
+        Stream<String> stream = Stream.of(jarek, adrian, daniel);
         return args -> {
             final int[] i = {7};
             stream.forEach(x -> {
-                coverageRepository.save(new Coverage(null, x + "Project", x + "Branch", x + "Build", LocalDate.now(), i[0]++));
-                coverageRepository.save(new Coverage(null, x + "Project", x + "Branch", x + "Build", LocalDate.now().plusDays(1), i[0]++));
+                final String project = "Project";
+                final String branch = "Branch";
+                final String build = "Build";
+                coverageRepository.save(new Coverage(null, x + project, x + branch, x + build, LocalDate.now(), i[0]++));
+                coverageRepository.save(new Coverage(null, x + project, x + branch, x + build, LocalDate.now().plusDays(1), i[0]++));
             });
         };
     }

@@ -22,11 +22,14 @@ public class CoverageRepositoryTest {
 
     @Test
     public void testRepo() {
-        final Coverage april27 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 27), 7);
-        final Coverage april28 = new Coverage(null, "project", "branch", "build", LocalDate.of(2017, 4, 28), 8);
+        final String project = "project";
+        final String branch = "branch";
+        final String build = "build";
+        final Coverage april27 = new Coverage(null, project, branch, build, LocalDate.of(2017, 4, 27), 7);
+        final Coverage april28 = new Coverage(null, project, branch, build, LocalDate.of(2017, 4, 28), 8);
         coverageRepository.save(april27);
         coverageRepository.save(april28);
-        Optional<Coverage> optionalCoverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc("project", "branch", "build");
+        Optional<Coverage> optionalCoverage = coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(project, branch, build);
         assertTrue(optionalCoverage.isPresent());
         assertEquals(8, optionalCoverage.orElseThrow(RuntimeException::new).getCoverage());
     }
