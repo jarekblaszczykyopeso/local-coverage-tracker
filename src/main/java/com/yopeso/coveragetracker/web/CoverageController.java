@@ -28,6 +28,6 @@ public class CoverageController {
     @RequestMapping(method = RequestMethod.PUT, value = "/{project}/{branch}/{build}")
     public void putCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable String build, @RequestBody int coverage) {
 
-        coverageService.saveCoverage(new Coverage(null, project, branch, build, LocalDate.now(), coverage));
+        coverageService.saveCoverage(new Coverage(project, branch, build, LocalDate.now(), coverage));
     }
 }

@@ -31,8 +31,8 @@ public class CoverageTrackerApplication {
                 final String project = "Project";
                 final String branch = "Branch";
                 final String build = "Build";
-                coverageRepository.save(new Coverage(null, x + project, x + branch, x + build, LocalDate.now(), i[0]++));
-                coverageRepository.save(new Coverage(null, x + project, x + branch, x + build, LocalDate.now().plusDays(1), i[0]++));
+                coverageRepository.save(new Coverage(x + project, x + branch, x + build, LocalDate.now(), i[0]++));
+                coverageRepository.save(new Coverage(x + project, x + branch, x + build, LocalDate.now().plusDays(1), i[0]++));
             });
         };
     }

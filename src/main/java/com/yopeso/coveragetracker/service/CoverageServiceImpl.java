@@ -21,6 +21,6 @@ public class CoverageServiceImpl implements CoverageService {
 
     @Override
     public Optional<Integer> getCoverage(CoverageRequest coverageRequest) {
-        return coverageRepository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(coverageRequest.getProjectName(), coverageRequest.getBranchName(), coverageRequest.getBuildNumber()).map(Coverage::getCoverage);
+        return coverageRepository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(coverageRequest.getProjectName(), coverageRequest.getBranchName(), coverageRequest.getBuildNumber()).map(Coverage::getCoverage);
     }
 }

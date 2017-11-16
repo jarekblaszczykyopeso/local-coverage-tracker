@@ -41,7 +41,7 @@ public class CoverageServiceImplTest {
         final Coverage coverage = mock(Coverage.class);
         when(coverage.getCoverage()).thenReturn(99);
         final Optional<Coverage> expected = Optional.of(coverage);
-        when(repository.findFirstByProjectNameAndBranchNameAndBuildNumberOrderByIdDesc(project, branch, build)).thenReturn(expected);
+        when(repository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(project, branch, build)).thenReturn(expected);
 
         final Optional<Integer> actual = service.getCoverage(new CoverageRequest(project, branch, build));
         assertTrue(actual.isPresent());

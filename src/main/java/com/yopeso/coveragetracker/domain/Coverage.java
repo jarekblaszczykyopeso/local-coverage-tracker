@@ -1,26 +1,24 @@
 package com.yopeso.coveragetracker.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Coverage {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String projectName;
-    private String branchName;
-    private String buildNumber;
+    @EmbeddedId
+    private CoveragePK coveragePK;
     private LocalDate date;
     private int coverage;
+
+    public Coverage(String projectName, String branchName, String buildNumber, LocalDate date, int coverage) {
+        this.coveragePK = new CoveragePK(projectName, branchName, buildNumber);
+        this.date = date;
+        this.coverage = coverage;
+    }
 }
