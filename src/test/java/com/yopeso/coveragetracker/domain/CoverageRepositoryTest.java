@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -24,13 +23,10 @@ public class CoverageRepositoryTest {
     public void testRepo() {
         final String project = "project";
         final String branch = "branch";
-        final String build = "build";
-        final Coverage april27 = new Coverage(project, branch, build, LocalDate.of(2017, 4, 27), 7);
-        final Coverage april28 = new Coverage(project, branch, build, LocalDate.of(2017, 4, 28), 8);
-        coverageRepository.save(april27);
-        coverageRepository.save(april28);
-        Optional<Coverage> optionalCoverage = coverageRepository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(project, branch, build);
+        final Coverage cov1 = new Coverage(project, branch, 11, 7);
+        coverageRepository.save(cov1);
+        Optional<Coverage> optionalCoverage = coverageRepository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(project, branch, 11);
         assertTrue(optionalCoverage.isPresent());
-        assertEquals(8, optionalCoverage.orElseThrow(RuntimeException::new).getCoverage());
+        assertEquals(7, optionalCoverage.orElseThrow(RuntimeException::new).getCoverage());
     }
 }

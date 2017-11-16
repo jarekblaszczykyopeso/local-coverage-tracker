@@ -7,5 +7,5 @@ public class CoverageRequest {
 
     private final String projectName;
     private final String branchName;
-    private final String buildNumber;
+    private final int buildNumber;
 }

@@ -7,7 +7,6 @@ import com.yopeso.coveragetracker.service.CoverageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -16,7 +15,7 @@ public class CoverageController {
     private final CoverageService coverageService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/{project}/{branch}/{build}")
-    public int getCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable String build) {
+    public int getCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable int build) {
 
         final CoverageRequest coverageRequest = new CoverageRequest(project, branch, build);
         final Optional<Integer> coverageOptional = coverageService.getCoverage(coverageRequest);
@@ -26,8 +25,8 @@ public class CoverageController {
 
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{project}/{branch}/{build}")
-    public void putCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable String build, @RequestBody int coverage) {
+    public void putCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable int build, @RequestBody int coverage) {
 
-        coverageService.saveCoverage(new Coverage(project, branch, build, LocalDate.now(), coverage));
+        coverageService.saveCoverage(new Coverage(project, branch, build, coverage));
     }
 }

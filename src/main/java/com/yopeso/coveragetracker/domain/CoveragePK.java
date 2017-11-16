@@ -14,5 +14,5 @@ import java.io.Serializable;
 public class CoveragePK implements Serializable {
     private String projectName;
     private String branchName;
-    private String buildNumber;
+    private int buildNumber;
 }

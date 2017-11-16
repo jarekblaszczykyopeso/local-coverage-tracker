@@ -36,7 +36,7 @@ public class CoverageServiceImplTest {
     public void testGetCoverage() throws Exception {
         final String project = "project";
         final String branch = "branch";
-        final String build = "build";
+        final int build = 1;
 
         final Coverage coverage = mock(Coverage.class);
         when(coverage.getCoverage()).thenReturn(99);

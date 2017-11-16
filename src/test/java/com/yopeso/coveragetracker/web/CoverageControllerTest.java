@@ -34,10 +34,10 @@ public class CoverageControllerTest {
 
     @Test
     public void testGet() {
-        final String getPath = "/project/branch/build";
+        final String getPath = "/project/branch/1";
         final String project = "project";
         final String branch = "branch";
-        final String build = "build";
+        final int build = 1;
         when(coverageService.getCoverage(eq(new CoverageRequest(project, branch, build)))).thenReturn(Optional.of(7));
         final ResponseEntity<Integer> responseEntity = restTemplate.getForEntity(getPath, Integer.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -46,10 +46,10 @@ public class CoverageControllerTest {
 
     @Test
     public void testGetBad() {
-        final String getBadPath = "/projectBad/branch/build";
+        final String getBadPath = "/projectBad/branch/1";
         final String projectBad = "projectBad";
         final String branch = "branch";
-        final String build = "build";
+        final int build = 1;
         when(coverageService.getCoverage(eq(new CoverageRequest(projectBad, branch, build)))).thenReturn(Optional.empty());
         final ResponseEntity<?> responseEntity = restTemplate.getForEntity(getBadPath, Object.class);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
@@ -57,7 +57,7 @@ public class CoverageControllerTest {
 
     @Test
     public void testPut() {
-        final String putPath = "/projectPut/branch/build";
+        final String putPath = "/projectPut/branch/1";
         final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
         verify(coverageService, times(1)).saveCoverage(any());
         assertEquals(HttpStatus.OK, putResponse.getStatusCode());
@@ -65,7 +65,7 @@ public class CoverageControllerTest {
 
     @Test
     public void testPutBad() {
-        final String putPath = "/projectPutBad/branch/build";
+        final String putPath = "/projectPutBad/branch/1";
         doThrow(new BadRequestException()).when(coverageService).saveCoverage(any());
         final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
         assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
