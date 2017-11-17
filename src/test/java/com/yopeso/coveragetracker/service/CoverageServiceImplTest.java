@@ -2,7 +2,8 @@ package com.yopeso.coveragetracker.service;
 
 import com.yopeso.coveragetracker.domain.Coverage;
 import com.yopeso.coveragetracker.domain.CoverageRepository;
-import com.yopeso.coveragetracker.domain.CoverageRequest;
+import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
+import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -17,6 +18,9 @@ public class CoverageServiceImplTest {
 
     private CoverageRepository repository;
     private CoverageService service;
+
+    final String project = "project";
+    final String branch = "branch";
 
     @Before
     public void setUp() throws Exception {
@@ -34,16 +38,27 @@ public class CoverageServiceImplTest {
 
     @Test
     public void testGetCoverage() throws Exception {
-        final String project = "project";
-        final String branch = "branch";
         final int build = 1;
 
         final Coverage coverage = mock(Coverage.class);
         when(coverage.getCoverage()).thenReturn(99);
         final Optional<Coverage> expected = Optional.of(coverage);
-        when(repository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(project, branch, build)).thenReturn(expected);
+        when(repository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumber(project, branch, build)).thenReturn(expected);
 
         final Optional<Integer> actual = service.getCoverage(new CoverageRequest(project, branch, build));
+        assertTrue(actual.isPresent());
+        assertEquals(Integer.valueOf(99), actual.orElseThrow(RuntimeException::new));
+    }
+
+    @Test
+    public void testGetLastCoverage() throws Exception {
+
+        final Coverage coverage = mock(Coverage.class);
+        when(coverage.getCoverage()).thenReturn(99);
+        final Optional<Coverage> expected = Optional.of(coverage);
+        when(repository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberDesc(project, branch)).thenReturn(expected);
+
+        final Optional<Integer> actual = service.getLastCoverage(new CoverageNoBuildRequest(project, branch));
         assertTrue(actual.isPresent());
         assertEquals(Integer.valueOf(99), actual.orElseThrow(RuntimeException::new));
     }

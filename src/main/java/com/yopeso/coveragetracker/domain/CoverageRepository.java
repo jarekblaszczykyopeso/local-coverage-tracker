@@ -6,5 +6,8 @@ import java.util.Optional;
 
 public interface CoverageRepository extends JpaRepository<Coverage, CoveragePK> {
 
-    Optional<Coverage> findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumberOrderByCoveragePK_BuildNumberDesc(String projectName, String branchName, int buildNumber);
+    Optional<Coverage> findByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumber(String projectName, String branchName, int buildNumber);
+
+    Optional<Coverage> findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberDesc(String projectName, String branchName);
+
 }

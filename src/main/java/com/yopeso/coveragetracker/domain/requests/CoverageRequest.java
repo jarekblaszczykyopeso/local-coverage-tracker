@@ -1,4 +1,4 @@
-package com.yopeso.coveragetracker.domain;
+package com.yopeso.coveragetracker.domain.requests;
 
 import lombok.Data;
 

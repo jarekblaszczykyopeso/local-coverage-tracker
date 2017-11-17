@@ -1,6 +1,6 @@
 package com.yopeso.coveragetracker.web;
 
-import com.yopeso.coveragetracker.domain.CoverageRequest;
+import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
 import com.yopeso.coveragetracker.exception.BadRequestException;
 import com.yopeso.coveragetracker.service.CoverageService;
 import org.junit.Test;

@@ -1,7 +1,8 @@
 package com.yopeso.coveragetracker.web;
 
 import com.yopeso.coveragetracker.domain.Coverage;
-import com.yopeso.coveragetracker.domain.CoverageRequest;
+import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
+import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
 import com.yopeso.coveragetracker.exception.ResourceNotFoundException;
 import com.yopeso.coveragetracker.service.CoverageService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,13 @@ import java.util.Optional;
 public class CoverageController {
     private final CoverageService coverageService;
 
+
+    @RequestMapping(method = RequestMethod.PUT, value = "/{project}/{branch}/{build}")
+    public void putCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable int build, @RequestBody int coverage) {
+
+        coverageService.saveCoverage(new Coverage(project, branch, build, coverage));
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/{project}/{branch}/{build}")
     public int getCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable int build) {
 
@@ -23,10 +31,14 @@ public class CoverageController {
 
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/{project}/{branch}/latest")
+    public int getLastCoverage(@PathVariable String project, @PathVariable String branch) {
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{project}/{branch}/{build}")
-    public void putCoverage(@PathVariable String project, @PathVariable String branch, @PathVariable int build, @RequestBody int coverage) {
+        final CoverageNoBuildRequest coverageRequest = new CoverageNoBuildRequest(project, branch);
+        final Optional<Integer> coverageOptional = coverageService.getLastCoverage(coverageRequest);
+        return coverageOptional.orElseThrow(ResourceNotFoundException::new);
 
-        coverageService.saveCoverage(new Coverage(project, branch, build, coverage));
     }
+
+
 }
