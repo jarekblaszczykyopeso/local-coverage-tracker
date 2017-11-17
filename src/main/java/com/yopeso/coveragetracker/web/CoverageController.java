@@ -3,11 +3,13 @@ package com.yopeso.coveragetracker.web;
 import com.yopeso.coveragetracker.domain.Coverage;
 import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
 import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
+import com.yopeso.coveragetracker.domain.responses.CoverageResponse;
 import com.yopeso.coveragetracker.exception.ResourceNotFoundException;
 import com.yopeso.coveragetracker.service.CoverageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -28,7 +30,6 @@ public class CoverageController {
         final CoverageRequest coverageRequest = new CoverageRequest(project, branch, build);
         final Optional<Integer> coverageOptional = coverageService.getCoverage(coverageRequest);
         return coverageOptional.orElseThrow(ResourceNotFoundException::new);
-
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{project}/{branch}/latest")
@@ -38,6 +39,17 @@ public class CoverageController {
         final Optional<Integer> coverageOptional = coverageService.getLastCoverage(coverageRequest);
         return coverageOptional.orElseThrow(ResourceNotFoundException::new);
 
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{project}/{branch}")
+    public List<CoverageResponse> getBranchCoverage(@PathVariable String project, @PathVariable String branch) {
+        final CoverageNoBuildRequest coverageRequest = new CoverageNoBuildRequest(project, branch);
+        final List<CoverageResponse> coverageBranch = coverageService.getBranchCoverage(coverageRequest);
+        if (!coverageBranch.isEmpty()) {
+            return coverageBranch;
+        } else {
+            throw new ResourceNotFoundException();
+        }
     }
 
 

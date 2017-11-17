@@ -1,10 +1,15 @@
 package com.yopeso.coveragetracker.web;
 
+import com.yopeso.coveragetracker.domain.Coverage;
+import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
 import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
+import com.yopeso.coveragetracker.domain.responses.CoverageResponse;
 import com.yopeso.coveragetracker.exception.BadRequestException;
 import com.yopeso.coveragetracker.service.CoverageService;
+import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -15,9 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
@@ -31,6 +39,23 @@ public class CoverageControllerTest {
 
     @Autowired
     private CoverageService coverageService;
+
+
+    @Test
+    public void testPut() {
+        final String putPath = "/projectPut/branch/1";
+        final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
+        verify(coverageService, times(1)).saveCoverage(any());
+        assertEquals(HttpStatus.OK, putResponse.getStatusCode());
+    }
+
+    @Test
+    public void testPutBad() {
+        final String putPath = "/projectPutBad/branch/1";
+        doThrow(new BadRequestException()).when(coverageService).saveCoverage(any());
+        final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
+        assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
+    }
 
     @Test
     public void testGet() {
@@ -56,19 +81,29 @@ public class CoverageControllerTest {
     }
 
     @Test
-    public void testPut() {
-        final String putPath = "/projectPut/branch/1";
-        final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
-        verify(coverageService, times(1)).saveCoverage(any());
-        assertEquals(HttpStatus.OK, putResponse.getStatusCode());
+    public void testGetLast() {
+        final String getLastPath = "/project/branch/latest";
+        final String project = "project";
+        final String branch = "branch";
+        when(coverageService.getLastCoverage(eq(new CoverageNoBuildRequest(project, branch)))).thenReturn(Optional.of(7));
+        final ResponseEntity<Integer> responseEntity = restTemplate.getForEntity(getLastPath, Integer.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(7, responseEntity.getBody().intValue());
     }
 
     @Test
-    public void testPutBad() {
-        final String putPath = "/projectPutBad/branch/1";
-        doThrow(new BadRequestException()).when(coverageService).saveCoverage(any());
-        final ResponseEntity<Object> putResponse = restTemplate.exchange(putPath, HttpMethod.PUT, new HttpEntity<>(7), Object.class);
-        assertEquals(HttpStatus.BAD_REQUEST, putResponse.getStatusCode());
+    public void testGetBranch() throws JSONException {
+        final String getBranchPath = "/project/branch";
+        final String project = "project";
+        final String branch = "branch";
+        final List<CoverageResponse> expected = Arrays.asList(new CoverageResponse(new Coverage(project, branch, 1, 11)), new CoverageResponse(new Coverage(project, branch, 2, 22)));
+        when(coverageService.getBranchCoverage(eq(new CoverageNoBuildRequest(project, branch)))).thenReturn(expected);
+        final ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity(getBranchPath, String.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertFalse(responseEntity.getBody().isEmpty());
+        final String expectedJSON = "[{project:project,branch:branch,build:1,coverage:11},{project:project,branch:branch,build:2,coverage:22}]";
+        JSONAssert.assertEquals(expectedJSON, responseEntity.getBody(), true);
     }
 }
 

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -51,9 +52,18 @@ public class CoverageRepositoryTest {
 
 
     @Test
-    public void testGetLastoverage() {
+    public void testGetLastCoverage() {
         final Optional<Coverage> optionalLastCoverage = coverageRepository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberDesc(project, branch);
         assertTrue(optionalLastCoverage.isPresent());
         assertEquals(coverage12, optionalLastCoverage.orElseThrow(RuntimeException::new).getCoverage());
     }
+
+    @Test
+    public void testGetBranchCoverage() {
+        final List<Coverage> branchCoverage = coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(project, branch);
+        assertFalse(branchCoverage.isEmpty());
+        assertEquals(coverage11, branchCoverage.get(0).getCoverage());
+    }
+
+
 }

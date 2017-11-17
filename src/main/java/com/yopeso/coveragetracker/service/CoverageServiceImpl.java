@@ -4,10 +4,13 @@ import com.yopeso.coveragetracker.domain.Coverage;
 import com.yopeso.coveragetracker.domain.CoverageRepository;
 import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
 import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
+import com.yopeso.coveragetracker.domain.responses.CoverageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +33,9 @@ public class CoverageServiceImpl implements CoverageService {
         return coverageRepository.findFirstByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberDesc(coverageRequest.getProjectName(), coverageRequest.getBranchName()).map(Coverage::getCoverage);
     }
 
-
+    @Override
+    public List<CoverageResponse> getBranchCoverage(CoverageNoBuildRequest coverageRequest) {
+        return coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(coverageRequest.getProjectName(), coverageRequest.getBranchName()).stream().map(
+                x -> new CoverageResponse(x)).collect(Collectors.toList());
+    }
 }
