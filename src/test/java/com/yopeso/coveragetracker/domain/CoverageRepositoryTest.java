@@ -27,6 +27,9 @@ public class CoverageRepositoryTest {
     final int coverage11 = 11;
     final int buildNumber12 = 12;
     final int coverage12 = 12;
+    final String branch21 = "branch21";
+    final int buildNumber21 = 21;
+    final int coverage21 = 21;
 
     @Before
     public void setUp() throws Exception {
@@ -34,6 +37,8 @@ public class CoverageRepositoryTest {
         coverageRepository.save(cov11);
         final Coverage cov12 = new Coverage(project, branch, buildNumber12, coverage12);
         coverageRepository.save(cov12);
+        final Coverage cov21 = new Coverage(project, branch21, buildNumber21, coverage21);
+        coverageRepository.save(cov21);
     }
 
     @Test
@@ -63,6 +68,13 @@ public class CoverageRepositoryTest {
         final List<Coverage> branchCoverage = coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(project, branch);
         assertFalse(branchCoverage.isEmpty());
         assertEquals(coverage11, branchCoverage.get(0).getCoverage());
+    }
+
+    @Test
+    public void testGetProjectCoverage() {
+        final List<Coverage> projectCoverage = coverageRepository.findByCoveragePK_ProjectNameOrderByCoveragePK_BranchNameAscCoveragePK_BuildNumberAsc(project);
+        assertFalse(projectCoverage.isEmpty());
+        assertEquals(coverage21, projectCoverage.get(2).getCoverage());
     }
 
 

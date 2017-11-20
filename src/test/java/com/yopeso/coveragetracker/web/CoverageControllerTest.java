@@ -105,5 +105,21 @@ public class CoverageControllerTest {
         final String expectedJSON = "[{project:project,branch:branch,build:1,coverage:11},{project:project,branch:branch,build:2,coverage:22}]";
         JSONAssert.assertEquals(expectedJSON, responseEntity.getBody(), true);
     }
+
+    @Test
+    public void testGetProject() throws JSONException {
+        final String getProjectPath = "/project";
+        final String project = "project";
+        final String branch1 = "branch1";
+        final String branch2 = "branch2";
+        final List<CoverageResponse> expected = Arrays.asList(new CoverageResponse(new Coverage(project, branch1, 1, 11)), new CoverageResponse(new Coverage(project, branch1, 2, 22)), new CoverageResponse(new Coverage(project, branch2, 1, 77)));
+        when(coverageService.getProjectCoverage(eq(project))).thenReturn(expected);
+        final ResponseEntity<String> responseEntity =
+                restTemplate.getForEntity(getProjectPath, String.class);
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertFalse(responseEntity.getBody().isEmpty());
+        final String expectedJSON = "[{project:project,branch:branch1,build:1,coverage:11},{project:project,branch:branch1,build:2,coverage:22},{project:project,branch:branch2,build:1,coverage:77}]";
+        JSONAssert.assertEquals(expectedJSON, responseEntity.getBody(), true);
+    }
 }
 

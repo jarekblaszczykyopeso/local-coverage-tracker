@@ -13,4 +13,6 @@ public interface CoverageRepository extends JpaRepository<Coverage, CoveragePK> 
 
     List<Coverage> findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(String projectName, String branchName);
 
+    List<Coverage> findByCoveragePK_ProjectNameOrderByCoveragePK_BranchNameAscCoveragePK_BuildNumberAsc(String projectName);
+
 }

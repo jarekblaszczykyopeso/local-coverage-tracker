@@ -38,4 +38,10 @@ public class CoverageServiceImpl implements CoverageService {
         return coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(coverageRequest.getProjectName(), coverageRequest.getBranchName()).stream().map(
                 x -> new CoverageResponse(x)).collect(Collectors.toList());
     }
+
+    @Override
+    public List<CoverageResponse> getProjectCoverage(String projectName) {
+        return coverageRepository.findByCoveragePK_ProjectNameOrderByCoveragePK_BranchNameAscCoveragePK_BuildNumberAsc(projectName).stream().map(
+                x -> new CoverageResponse(x)).collect(Collectors.toList());
+    }
 }

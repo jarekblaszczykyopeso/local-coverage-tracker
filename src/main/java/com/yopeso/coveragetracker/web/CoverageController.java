@@ -52,5 +52,14 @@ public class CoverageController {
         }
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/{project}")
+    public List<CoverageResponse> getProjectCoverage(@PathVariable String project) {
+        final List<CoverageResponse> coverageProject = coverageService.getProjectCoverage(project);
+        if (!coverageProject.isEmpty()) {
+            return coverageProject;
+        } else {
+            throw new ResourceNotFoundException();
+        }
+    }
 
 }

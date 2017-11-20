@@ -17,4 +17,6 @@ public interface CoverageService {
     Optional<Integer> getLastCoverage(CoverageNoBuildRequest coverageRequest);
 
     List<CoverageResponse> getBranchCoverage(CoverageNoBuildRequest coverageRequest);
+
+    List<CoverageResponse> getProjectCoverage(String projectName);
 }
