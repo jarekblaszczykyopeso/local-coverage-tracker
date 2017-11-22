@@ -1,8 +1,8 @@
 package com.yopeso.coveragetracker.web;
 
 import com.yopeso.coveragetracker.domain.Coverage;
-import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
-import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
+import com.yopeso.coveragetracker.domain.requests.BranchRequest;
+import com.yopeso.coveragetracker.domain.requests.BuildRequest;
 import com.yopeso.coveragetracker.domain.responses.CoverageResponse;
 import com.yopeso.coveragetracker.exception.BadRequestException;
 import com.yopeso.coveragetracker.service.CoverageService;
@@ -63,7 +63,7 @@ public class CoverageControllerTest {
         final String project = "project";
         final String branch = "branch";
         final int build = 1;
-        when(coverageService.getCoverage(eq(new CoverageRequest(project, branch, build)))).thenReturn(Optional.of(7));
+        when(coverageService.getCoverage(eq(new BuildRequest(project, branch, build)))).thenReturn(Optional.of(7));
         final ResponseEntity<Integer> responseEntity = restTemplate.getForEntity(getPath, Integer.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(7, responseEntity.getBody().intValue());
@@ -75,7 +75,7 @@ public class CoverageControllerTest {
         final String projectBad = "projectBad";
         final String branch = "branch";
         final int build = 1;
-        when(coverageService.getCoverage(eq(new CoverageRequest(projectBad, branch, build)))).thenReturn(Optional.empty());
+        when(coverageService.getCoverage(eq(new BuildRequest(projectBad, branch, build)))).thenReturn(Optional.empty());
         final ResponseEntity<?> responseEntity = restTemplate.getForEntity(getBadPath, Object.class);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
@@ -85,7 +85,7 @@ public class CoverageControllerTest {
         final String getLastPath = "/project/branch/latest";
         final String project = "project";
         final String branch = "branch";
-        when(coverageService.getLastCoverage(eq(new CoverageNoBuildRequest(project, branch)))).thenReturn(Optional.of(7));
+        when(coverageService.getLastCoverage(eq(new BranchRequest(project, branch)))).thenReturn(Optional.of(7));
         final ResponseEntity<Integer> responseEntity = restTemplate.getForEntity(getLastPath, Integer.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(7, responseEntity.getBody().intValue());
@@ -96,8 +96,8 @@ public class CoverageControllerTest {
         final String getBranchPath = "/project/branch";
         final String project = "project";
         final String branch = "branch";
-        final List<CoverageResponse> expected = Arrays.asList(new CoverageResponse(new Coverage(project, branch, 1, 11)), new CoverageResponse(new Coverage(project, branch, 2, 22)));
-        when(coverageService.getBranchCoverage(eq(new CoverageNoBuildRequest(project, branch)))).thenReturn(expected);
+        final Optional<List<CoverageResponse>> expectedMock = Optional.of(Arrays.asList(new CoverageResponse(new Coverage(project, branch, 1, 11)), new CoverageResponse(new Coverage(project, branch, 2, 22))));
+        when(coverageService.getBranchCoverage(eq(new BranchRequest(project, branch)))).thenReturn(expectedMock);
         final ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(getBranchPath, String.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -112,8 +112,8 @@ public class CoverageControllerTest {
         final String project = "project";
         final String branch1 = "branch1";
         final String branch2 = "branch2";
-        final List<CoverageResponse> expected = Arrays.asList(new CoverageResponse(new Coverage(project, branch1, 1, 11)), new CoverageResponse(new Coverage(project, branch1, 2, 22)), new CoverageResponse(new Coverage(project, branch2, 1, 77)));
-        when(coverageService.getProjectCoverage(eq(project))).thenReturn(expected);
+        final Optional<List<CoverageResponse>> expectedMock = Optional.of(Arrays.asList(new CoverageResponse(new Coverage(project, branch1, 1, 11)), new CoverageResponse(new Coverage(project, branch1, 2, 22)), new CoverageResponse(new Coverage(project, branch2, 1, 77))));
+        when(coverageService.getProjectCoverage(eq(project))).thenReturn(expectedMock);
         final ResponseEntity<String> responseEntity =
                 restTemplate.getForEntity(getProjectPath, String.class);
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

@@ -1,8 +1,8 @@
 package com.yopeso.coveragetracker.service;
 
 import com.yopeso.coveragetracker.domain.Coverage;
-import com.yopeso.coveragetracker.domain.requests.CoverageNoBuildRequest;
-import com.yopeso.coveragetracker.domain.requests.CoverageRequest;
+import com.yopeso.coveragetracker.domain.requests.BranchRequest;
+import com.yopeso.coveragetracker.domain.requests.BuildRequest;
 import com.yopeso.coveragetracker.domain.responses.CoverageResponse;
 
 import java.util.List;
@@ -12,11 +12,11 @@ public interface CoverageService {
 
     void saveCoverage(Coverage coverage);
 
-    Optional<Integer> getCoverage(CoverageRequest coverageRequest);
+    Optional<Integer> getCoverage(BuildRequest buildRequest);
 
-    Optional<Integer> getLastCoverage(CoverageNoBuildRequest coverageRequest);
+    Optional<Integer> getLastCoverage(BranchRequest coverageRequest);
 
-    List<CoverageResponse> getBranchCoverage(CoverageNoBuildRequest coverageRequest);
+    Optional<List<CoverageResponse>> getBranchCoverage(BranchRequest coverageRequest);
 
-    List<CoverageResponse> getProjectCoverage(String projectName);
+    Optional<List<CoverageResponse>> getProjectCoverage(String projectName);
 }

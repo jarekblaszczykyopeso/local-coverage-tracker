@@ -65,16 +65,16 @@ public class CoverageRepositoryTest {
 
     @Test
     public void testGetBranchCoverage() {
-        final List<Coverage> branchCoverage = coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(project, branch);
-        assertFalse(branchCoverage.isEmpty());
-        assertEquals(coverage11, branchCoverage.get(0).getCoverage());
+        final Optional<List<Coverage>> branchCoverage = coverageRepository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameOrderByCoveragePK_BuildNumberAsc(project, branch);
+        assertTrue(branchCoverage.isPresent());
+        assertEquals(coverage11, branchCoverage.get().get(0).getCoverage());
     }
 
     @Test
     public void testGetProjectCoverage() {
-        final List<Coverage> projectCoverage = coverageRepository.findByCoveragePK_ProjectNameOrderByCoveragePK_BranchNameAscCoveragePK_BuildNumberAsc(project);
-        assertFalse(projectCoverage.isEmpty());
-        assertEquals(coverage21, projectCoverage.get(2).getCoverage());
+        final Optional<List<Coverage>> projectCoverage = coverageRepository.findByCoveragePK_ProjectNameOrderByCoveragePK_BranchNameAscCoveragePK_BuildNumberAsc(project);
+        assertTrue(projectCoverage.isPresent());
+        assertEquals(coverage21, projectCoverage.get().get(2).getCoverage());
     }
 
 
