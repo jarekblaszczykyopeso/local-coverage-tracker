@@ -1,5 +1,7 @@
 package com.yopeso.coveragetracker.web;
 
+import com.yopeso.coveragetracker.domain.CoverageRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -127,6 +129,11 @@ public class CoverageControllerSimpleAndVallidationTest {
         mock.perform(put("/project/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("101"));
+    }
+
+    @After
+    public void clearData() {
+        wac.getBean(CoverageRepository.class).deleteAll();
     }
 
 

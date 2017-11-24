@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class CoverageServiceImplTest {
@@ -53,6 +52,14 @@ public class CoverageServiceImplTest {
         final Optional<Integer> actual = service.getCoverage(new Build(project, branch, build));
         assertTrue(actual.isPresent());
         assertEquals(Integer.valueOf(99), actual.orElseThrow(RuntimeException::new));
+    }
+
+    @Test
+    public void testGetCoverageBad() throws Exception {
+        final int build = 1;
+        when(repository.findByCoveragePK_ProjectNameAndCoveragePK_BranchNameAndCoveragePK_BuildNumber(project, branch, build)).thenReturn(Optional.empty());
+        final Optional<Integer> actual = service.getCoverage(new Build(project, branch, build));
+        assertFalse(actual.isPresent());
     }
 
     @Test
