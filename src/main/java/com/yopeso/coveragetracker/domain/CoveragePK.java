@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -14,5 +15,6 @@ import java.io.Serializable;
 public class CoveragePK implements Serializable {
     private String projectName;
     private String branchName;
+    @Min(1)
     private int buildNumber;
 }

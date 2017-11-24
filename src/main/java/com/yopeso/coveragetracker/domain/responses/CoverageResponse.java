@@ -1,6 +1,6 @@
 package com.yopeso.coveragetracker.domain.responses;
 
-import com.yopeso.coveragetracker.domain.Coverage;
+import com.yopeso.coveragetracker.domain.Measurement;
 import lombok.Getter;
 
 @Getter
@@ -10,11 +10,11 @@ public class CoverageResponse {
     private final int build;
     private final int coverage;
 
-    public CoverageResponse(Coverage coverageEntity) {
-        project = coverageEntity.getCoveragePK().getProjectName();
-        branch = coverageEntity.getCoveragePK().getBranchName();
-        build = coverageEntity.getCoveragePK().getBuildNumber();
-        coverage = coverageEntity.getCoverage();
+    public CoverageResponse(Measurement measurementEntity) {
+        project = measurementEntity.getCoveragePK().getProjectName();
+        branch = measurementEntity.getCoveragePK().getBranchName();
+        build = measurementEntity.getCoveragePK().getBuildNumber();
+        coverage = measurementEntity.getCoverage();
 
     }
 }
