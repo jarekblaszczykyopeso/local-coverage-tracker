@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/coverage")
 @RequiredArgsConstructor
 public class CoverageController {
     private final CoverageService coverageService;
