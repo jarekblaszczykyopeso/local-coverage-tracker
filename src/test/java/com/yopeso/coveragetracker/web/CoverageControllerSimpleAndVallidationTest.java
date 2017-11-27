@@ -17,7 +17,6 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -32,13 +31,13 @@ public class CoverageControllerSimpleAndVallidationTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mock = MockMvcBuilders.webAppContextSetup(wac).build();
-        mock.perform(put("/project/branch/1")
+        mock.perform(put("/coverage/project/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("1"));
-        mock.perform(put("/project/branch/2")
+        mock.perform(put("/coverage/project/branch/2")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("2"));
-        mock.perform(put("/project/branch23/23")
+        mock.perform(put("/coverage/project/branch23/23")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("23"));
     }
@@ -46,7 +45,7 @@ public class CoverageControllerSimpleAndVallidationTest {
     //SIMPLE TESTS
     @Test
     public void testPut() throws Exception {
-        mock.perform(put("/projectOther/branch/1")
+        mock.perform(put("/coverage/projectOther/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("1"))
                 .andExpect(status().isOk());
@@ -54,8 +53,7 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Test
     public void testGet() throws Exception {
-        mock.perform(get("/project/branch/1"))
-                .andDo(print())
+        mock.perform(get("/coverage/project/branch/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string(equalTo("1")));
@@ -63,7 +61,7 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Test
     public void testGetBad() throws Exception {
-        mock.perform(get("/project/branch/77"))
+        mock.perform(get("/coverage/project/branch/77"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string(isEmptyString()));
 
@@ -71,7 +69,7 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Test
     public void testGetLast() throws Exception {
-        mock.perform(get("/project/branch/latest"))
+        mock.perform(get("/coverage/project/branch/latest"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(content().string(equalTo("2")));
@@ -79,8 +77,7 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Test
     public void testGetBranch() throws Exception {
-        mock.perform(get("/project/branch"))
-                .andDo(print())
+        mock.perform(get("/coverage/project/branch"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -95,8 +92,7 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Test
     public void testGetProject() throws Exception {
-        mock.perform(get("/project"))
-                .andDo(print())
+        mock.perform(get("/coverage/project"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(3)))
@@ -112,21 +108,21 @@ public class CoverageControllerSimpleAndVallidationTest {
     //VALIDATON
     @Test(expected = org.springframework.web.util.NestedServletException.class)
     public void testPutValidationBadBuild() throws Exception {
-        mock.perform(put("/project/branch/0")
+        mock.perform(put("/coverage/project/branch/0")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("77"));
     }
 
     @Test(expected = org.springframework.web.util.NestedServletException.class)
     public void testPutValidationBadCoverageMinus1() throws Exception {
-        mock.perform(put("/project/branch/1")
+        mock.perform(put("/coverage/project/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("-1"));
     }
 
     @Test(expected = org.springframework.web.util.NestedServletException.class)
     public void testPutValidationBadCoverage101() throws Exception {
-        mock.perform(put("/project/branch/1")
+        mock.perform(put("/coverage/project/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("101"));
     }
