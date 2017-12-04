@@ -33,7 +33,6 @@ public class CoverageTrackerApplication {
                 final String project = "Project";
                 final String branch = "Branch";
                 coverageRepository.save(new Measurement(i[0]++, new CoveragePK(x + project, x + branch, build[0]++)));
-                coverageRepository.save(new Measurement(i[0]++, new CoveragePK(x + project, x + branch, build[0]++)));
             });
         };
     }

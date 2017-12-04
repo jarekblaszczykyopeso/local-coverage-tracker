@@ -1,0 +1,23 @@
+version: '2'
+services:
+  web:
+    image: yopeso/coverage-tracker:1
+    ports:
+      - "8080:8080"
+    depends_on:
+      - coverage_tracker_postgres
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_URL=jdbc:postgresql://coverage_tracker_postgres:5432
+      - POSTGRES_USER=${POST_USER}
+      - POSTGRES_PASS=${POST_PASS}
+      - POSTGRES_DB=${POST_DB}
+  coverage_tracker_postgres:
+    image: postgres:9.4 
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: 

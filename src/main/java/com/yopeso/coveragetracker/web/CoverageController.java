@@ -18,8 +18,8 @@ import java.util.Optional;
 @RequestMapping("/coverage")
 @RequiredArgsConstructor
 public class CoverageController {
-    private final CoverageService coverageService;
 
+    private final CoverageService coverageService;
 
     @Validated
     @RequestMapping(method = RequestMethod.PUT, value = "/{project}/{branch}/{build}")
