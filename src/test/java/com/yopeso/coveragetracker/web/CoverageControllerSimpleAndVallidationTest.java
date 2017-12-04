@@ -5,7 +5,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -29,7 +28,6 @@ public class CoverageControllerSimpleAndVallidationTest {
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         mock = MockMvcBuilders.webAppContextSetup(wac).build();
         mock.perform(put("/coverage/project/branch/1")
                 .contentType(MediaType.APPLICATION_JSON)
