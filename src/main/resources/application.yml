@@ -3,9 +3,12 @@ spring:
     url: ${POSTGRES_URL}/${POSTGRES_DB}
     driverClassName: org.postgresql.Driver
     username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASS}
+    password: ${POSTGRES_PASSWORD}
   jpa:
     generate-ddl: true
     hibernate.ddl-auto: none
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+logging:
+   level:
+      ROOT: ERROR
