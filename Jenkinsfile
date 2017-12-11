@@ -18,7 +18,7 @@ pipeline {
           steps {
              junit 'target/surefire-reports/*.xml'
              jacoco(execPattern: 'target/jacoco-unit/jacoco.exec')
-             input 'just wait'
+             sh "cat jacoco-unit-report/jacoco.xml"
           }
        }
     }
