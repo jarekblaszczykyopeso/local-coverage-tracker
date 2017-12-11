@@ -18,8 +18,7 @@ pipeline {
           steps {
              junit 'target/surefire-reports/*.xml'
              jacoco(execPattern: 'target/jacoco-unit/jacoco.exec')
-             sh "pwd"
-             sh "ls"
+             sh "cat target/jacoco-unit-report/jacoco.xml"
           }
        }
     }
