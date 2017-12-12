@@ -19,6 +19,8 @@ pipeline {
              junit 'target/surefire-reports/*.xml'
              jacoco(execPattern: 'target/jacoco-unit/jacoco.exec')
              sh "cat target/jacoco-unit-report/jacoco.xml"
+             echo 'first test echo'
+             input 'then input test'
           }
        }
     }
